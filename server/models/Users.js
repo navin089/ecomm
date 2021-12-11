@@ -1,19 +1,49 @@
-module.exports = {
-	find: function(con, callback) {
-	  con.query("SELECT * FROM users", callback)
-	},
+module.exports = (sequelize, Sequelize) => {
+	const Users = sequelize.define("users", {
+	  name: {
+		type: Sequelize.STRING,
+		allowNull: false,
+		validate: {
+			notNull: {
+			  msg: 'Please enter your name'
+			}
+		  }
+	  },
+	  email: {
+		type: Sequelize.STRING,
+		allowNull: false,
+		validate: {
+			notNull: {
+			  msg: 'Please enter your email'
+			}
+		  }
+	  },
+	  phone: {
+		type: Sequelize.INTEGER,
+		defaultValue: null,
+	  },
+	  dob: {
+		type: Sequelize.DATE,
+		defaultValue: null,
+	  },
+	  address: {
+		type: Sequelize.TEXT,
+		defaultValue: null,
+	  },
+	  password: {
+		type: Sequelize.STRING,
+		allowNull: false,
+		validate: {
+			notNull: {
+			  msg: 'Please enter your password'
+			}
+		  }
+	  },
+	  token: {
+		type: Sequelize.TEXT,
+		defaultValue: null,
+	  },
+	});
   
-	findById: function(con, id, callback) {
-	  con.query(`SELECT * FROM users WHERE id = ${id}`, callback)
-	},
-  
-	create: function(con, data, callback) {
-	  con.query(
-		`INSERT INTO users SET 
-		name = '${data.name}', 
-		email = '${data.email}',
-		password = '${data.password}'`,
-		callback
-	  )
-	}
-  }
+	return Users;
+  };

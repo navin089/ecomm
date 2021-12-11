@@ -1,9 +1,9 @@
-const bcrypt = require("bcrypt");
-const db = require("../config/db");
-const Users = require("../models/Users");
-const Validator = require("validatorjs");
-
-const { validationResult } = require("express-validator");
+var bcrypt = require('bcryptjs');
+const Model = require("../models");
+const Users = Model.Users;
+// const Op = Model.Sequelize.Op;
+// const Validator = require("validatorjs");
+// const { validationResult } = require("express-validator");
 
 //sample data getting route
 const Test = async (req, res) => {
@@ -18,96 +18,91 @@ const Test = async (req, res) => {
 };
 
 //listing of no of users from database
-const getUsers = async (req, res, next) => {
-  console.log("this is get all user function");
-  // console.log(req.params)
-  try {
-    Users.find(db, (err, rows) => {
-      if (err) {
-        // res.sendStatus(500)
-        res.end(
-          JSON.stringify({
-            message: "something went wrong",
-            status: false,
-          })
-        );
-      } else {
-        // const data = JSON.stringify(rows)
-        // res.sendStatus(200)
-        console.log(JSON.stringify(rows));
+const LoginUsers = async (req, res, next) => {
 
-        res.status(200).json({
-          data: data,
-          message: "user registration successfully",
-          status: true,
-        });
-      }
+  if (!req.body.email && !req.body.password) {
+    res.status(400).send({
+      message: "email and password can not be empty!",
+      success: false
     });
-    next(res);
-  } catch (e) {
-    // console.log(e.message)
-    // res.sendStatus(500)
-    res.end(
-      JSON.stringify({
-        message: "something went wrong",
-        status: false,
-      })
-    );
+    return;
+
+  }else {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    Users.findAll({
+      where: {
+        email: email
+      }
+    })
+    .then(data => {
+      // res.send(data);
+      console.log('login data ;',data[0].dataValues.password);
+      if (data[0].dataValues.password == password) {
+        res.status(200).send({
+            data: data,
+            message: 'user logged in successfully',
+            success: true
+        });
+      }else {
+        res.status(404).send({
+          message: 'Password is invalid',
+          success: false
+      });
+      }
+    })
+    .catch(err => {
+      res.status(404).send({
+        message:
+          err.message || "user does not exist",
+          success: false
+      });
+    });
+
   }
+  
 };
 
 //controller for creating new user
-const createUser = async (req, res) => {
-    let data = req.body;
-    let rules = {
-        name: 'required|string',
-        email: 'required|email',
-         password: 'required|min:8'
-      };
-    
-      let validation = new Validator(data, rules);
+const RegisterUser = async (req, res) => {
+    // Validate request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!",
+      success: false
+    });
+    return;
+  }
 
-      if (validation.passes()) {
-        try {
-            console.log(req.body);
-            const data = req.body;
-            Users.create(db, data, (err) => {
-              if (!err) {
-                // res.sendStatus(500)
-                res.status(201).json({
-                  message: "user registration successfully",
-                  status: true,
-                });
-              } else {
-              
-                res.status(400).json({
-                    message: "failed to create a new account",
-                    status: false,
-                  });
-              }
-            });
-            // next(res)
-          } catch (e) {
-            // console.log(e.message)
-            // res.sendStatus(500)
-            res.status(400).json({
-                message: "--failed to create a new account",
-                status: false,
-              });
-          }
-      }else{
-        res.status(400).json({
-            message: "-+-failed to create a new account",
-            status: false,
-          });
-      }
+  // Create a Tutorial
+  const user = {
+    name: req.body.name,
+    email: req.body.email,
+    password: bcrypt.hashSync('bacon', 10)
+  };
 
-    
- 
+  // Save Tutorial in the database
+  Users.create(user)
+    .then(data => {
+      res.status(201).send({
+          data: data, 
+          message: "User has been created successfully..",
+          success: true
+        });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the user.",
+          success: false
+      });
+    });
+
 };
 
 module.exports = {
   Test,
-  getUsers,
-  createUser,
+  RegisterUser,
+  LoginUsers
 };
