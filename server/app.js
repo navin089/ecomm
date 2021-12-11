@@ -24,13 +24,13 @@ app.use('/api', router);
 app.use(express.json());
 
 //for checking duplicate emails
-app.use(checkDuplicateEmail);
+// app.use(checkDuplicateEmail);
 
 //db config with sequelize
-db.sequelize.sync();
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
+// db.sequelize.sync();
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+});
 
 ///server listener
 app.listen(PORT, () => {

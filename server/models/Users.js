@@ -18,6 +18,10 @@ module.exports = (sequelize, Sequelize) => {
 			}
 		  }
 	  },
+	  gender: {
+		type: Sequelize.STRING,
+		defaultValue: null,
+	  },
 	  phone: {
 		type: Sequelize.INTEGER,
 		defaultValue: null,
@@ -28,6 +32,22 @@ module.exports = (sequelize, Sequelize) => {
 	  },
 	  address: {
 		type: Sequelize.TEXT,
+		defaultValue: null,
+	  },
+	  city: {
+		type: Sequelize.STRING,
+		defaultValue: null,
+	  },
+	  state: {
+		type: Sequelize.STRING,
+		defaultValue: null,
+	  },
+	  pincode: {
+		type: Sequelize.INTEGER,
+		defaultValue: null,
+	  },
+	  profile: {
+		type: Sequelize.STRING,
 		defaultValue: null,
 	  },
 	  password: {
