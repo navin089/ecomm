@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const router = require('./routes')
 const cors = require('cors');
 const db = require("./models");
-const { checkDuplicateEmail } = require("./middleware/verifySignUp.js");
+const { checkDuplicateEmail } = require("./middleware/auth.js");
 const PORT = 4000;
 
 // parse application/x-www-form-urlencoded
@@ -23,14 +23,12 @@ app.use('/api', router);
 
 app.use(express.json());
 
-//for checking duplicate emails
-// app.use(checkDuplicateEmail);
 
 //db config with sequelize
-// db.sequelize.sync();
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and re-sync db.");
-});
+db.sequelize.sync()
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("Drop and re-sync db. --dynamic dropshot");
+// });
 
 ///server listener
 app.listen(PORT, () => {
