@@ -1,19 +1,23 @@
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
-const Model = require("../models");
-const Users = Model.Users;
+const model = require("../models/index");
+// const Users = Model.Users;
 
 
 //sample data getting route
 const Test = async (req, res) => {
-  res.json({
-    posts: [
-      { title: "First posts" },
-      { city: "CAROLINA" },
-      { Date: "12/3/2021" },
-      { author: "Jia Morgan" },
-    ],
-  });
+
+
+  model.Users.findAll().then(user => {
+    if (user) {
+      return res.json({
+          data: user
+      });
+    }
+  }).catch( error => {
+    res.status( 400 ).send( error )
+  })
+
 };
 
 //listing of no of users from database
@@ -34,7 +38,7 @@ const LoginUsers = async (req, res, next) => {
     });
   }
 
-  Users.findOne({
+  model.Users.findAll({
     where: {email: email}
   }).then(user => {
       console.log('login data ;',user.dataValues.password);
@@ -88,7 +92,7 @@ const RegisterUser = async (req, res) => {
     });
      }
 
-     Users.findOne({
+     model.Users.findAll({
       where: {email: email}
     }).then(user => {
       if (user) {
@@ -103,7 +107,6 @@ const RegisterUser = async (req, res) => {
      const encryptedPassword = await bcrypt.hash(password, 10);
      const token = jwt.sign({ email: email }, 'shhhhh');
      
-
   // Create a Tutorial
   const user = {
     name: name,
@@ -113,7 +116,7 @@ const RegisterUser = async (req, res) => {
   };
 
   // Save Tutorial in the database
-  Users.create(user)
+  model.Users.create(user)
     .then(data => {
       res.status(201).send({
           data: data, 
