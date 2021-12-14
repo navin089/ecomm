@@ -4,8 +4,8 @@ const app = express();
 const bodyParser = require('body-parser')
 const router = require('./routes')
 const cors = require('cors');
-const db = require("./models");
-const { checkDuplicateEmail } = require("./middleware/auth.js");
+// const db = require("./models");
+
 const PORT = 4000;
 
 // parse application/x-www-form-urlencoded
@@ -25,7 +25,7 @@ app.use(express.json());
 
 
 //db config with sequelize
-db.sequelize.sync()
+// db.sequelize.sync()
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and re-sync db. --dynamic dropshot");
 // });

@@ -1,6 +1,7 @@
 const router = require('express').Router()
-// const router = express.Router()
-const { Test, RegisterUser, LoginUsers } = require('../controllers/UserController')
+//listProducts
+const { Test, RegisterUser, LoginUsers } = require('../controllers/UserController');
+const { listProducts } = require('../controllers/ProductController')
 
 
 
@@ -8,6 +9,8 @@ const { Test, RegisterUser, LoginUsers } = require('../controllers/UserControlle
 router.get('/test', Test);
 router.post('/login', LoginUsers); 
 router.post('/register', RegisterUser);
+
+router.post('/products', listProducts);
 
 
 module.exports = router
