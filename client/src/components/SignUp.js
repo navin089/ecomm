@@ -48,12 +48,12 @@ function SignUp() {
               className="outline-0"
             />
           </div>
-          {/* <p
+          <p
             className="text-xs text-gray-400 float-right mt-1 mr-2 
                     cursor-pointer hover:underline hover:text-gray-600"
           >
             Forgot password?
-          </p> */}
+          </p>
         </div>
 
         <div>
