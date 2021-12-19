@@ -2,6 +2,12 @@ import React from 'react';
 import { UserIcon, LockClosedIcon, KeyIcon, AtSymbolIcon } from "@heroicons/react/solid";
 
 function SignUp() {
+
+  const handleSession = ()=>{
+    sessionStorage.setItem("user",JSON.stringify({
+      user:"test"
+    }));
+  }
     return (
         <div className="flex justify-center items-center p-12 shadow-md max-w-lg mx-auto my-12">
       <div className="text-center">
@@ -76,6 +82,7 @@ function SignUp() {
           <button
             className="bg-gray-200 text-blue-800 px-6 py-2 rounded-full 
                 font-semibold hover:bg-blue-800 hover:text-white transition duration-200 ease-in-out hover:scale-105"
+                onClick={handleSession}
           >
             Facebook
           </button>
